@@ -4,43 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fb90370-2fea-41a8-b587-24dd2a09bf6f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/my-world-monitor.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/api/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/api/src/data/bases.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/api/src/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/api/tsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/WorldMonitor.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/LoadingOverlay.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/MapTooltip.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/Sidebar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/StatusBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/TopBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/components/ZoomControls.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/constants/layers.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/hooks/useMapData.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/hooks/useProjection.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/hooks/useWindowSize.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/hooks/useZoom.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/layers/BasesLayer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/layers/CablesLayer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/layers/CountriesLayer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/layers/GraticuleLayer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/main.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/src/store/useMapStore.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/tsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/tsconfig.node.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/web/vite.config.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/types/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/types/src/index.ts" afterDir="false" />
+    <list default="true" id="5fb90370-2fea-41a8-b587-24dd2a09bf6f" name="Changes" comment="feat: initialize project structure, implement map and static layers">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +23,31 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1772110391" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1772110390" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -82,7 +72,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "javascript.preferred.runtime.type.id": "node",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/Users/tri.dung.ngo/Git/my-world-monitor",
@@ -130,12 +120,25 @@
       <workItem from="1772105655400" duration="137000" />
       <workItem from="1772105864377" duration="38000" />
       <workItem from="1772106149672" duration="580000" />
-      <workItem from="1772106756195" duration="2448000" />
+      <workItem from="1772106756195" duration="3849000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: initialize project structure, implement map and static layers">
+      <option name="closed" value="true" />
+      <created>1772110324975</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772110324975</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: initialize project structure, implement map and static layers" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: initialize project structure, implement map and static layers" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
