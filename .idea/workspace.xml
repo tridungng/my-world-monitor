@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fb90370-2fea-41a8-b587-24dd2a09bf6f" name="Changes" comment="feat: initialize project structure, implement map and static layers">
+    <list default="true" id="5fb90370-2fea-41a8-b587-24dd2a09bf6f" name="Changes" comment="chore: update idea workspace config">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +25,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "tridungng"
+  }
+}]]></component>
   <component name="GitToolBoxStore">
     <option name="recentBranches">
       <RecentBranches>
@@ -49,6 +56,12 @@
       </RecentBranches>
     </option>
   </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/tridungng/my-world-monitor.git",
+    "accountId": "879c677e-087f-4b73-abdd-6b2c645760e9"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -120,7 +133,7 @@
       <workItem from="1772105655400" duration="137000" />
       <workItem from="1772105864377" duration="38000" />
       <workItem from="1772106149672" duration="580000" />
-      <workItem from="1772106756195" duration="3849000" />
+      <workItem from="1772106756195" duration="4632000" />
     </task>
     <task id="LOCAL-00001" summary="feat: initialize project structure, implement map and static layers">
       <option name="closed" value="true" />
@@ -130,15 +143,35 @@
       <option name="project" value="LOCAL" />
       <updated>1772110324975</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="chore: update idea workspace config">
+      <option name="closed" value="true" />
+      <created>1772122997907</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1772122997907</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: initialize project structure, implement map and static layers" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: initialize project structure, implement map and static layers" />
+    <MESSAGE value="chore: update idea workspace config" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: update idea workspace config" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

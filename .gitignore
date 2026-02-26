@@ -6,4 +6,5 @@ dist/
 .DS_Store
 /.idea/developer-tools.xml
 /.idea/vcs.xml
+/.idea/workspace.xml
 /.idea/*
