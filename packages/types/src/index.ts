@@ -60,6 +60,67 @@ export interface CableProperties {
     landing_points: string[];
 }
 
+// ─── Disasters ────────────────────────────────────────────────────────────────
+
+export interface Earthquake {
+    id: string;
+    mag: number;
+    place: string;
+    time: number;       // unix ms
+    depth: number;      // km
+    lat: number;
+    lon: number;
+    url: string;
+    status: string;
+    tsunami: number;
+}
+
+export type EONETCategory =
+    | "Wildfires"
+    | "Severe Storms"
+    | "Volcanoes"
+    | "Sea and Lake Ice"
+    | "Floods"
+    | "Drought"
+    | "Dust and Haze"
+    | "Landslides"
+    | "Snow"
+    | "Earthquakes"
+    | string;
+
+export interface EONETEvent {
+    id: string;
+    title: string;
+    category: EONETCategory;
+    date: string;       // ISO
+    lat: number;
+    lon: number;
+    closed: string | null;
+}
+
+// ─── Economic ────────────────────────────────────────────────────────────────
+
+export interface FREDObservation {
+    date: string;       // "YYYY-MM-DD"
+    value: number | null;
+}
+
+export interface FREDSeries {
+    id: string;
+    title: string;
+    units: string;
+    frequency: string;
+    observations: FREDObservation[];
+    isDemo?: boolean;   // true when no API key is set
+}
+
+export type EconomicSeriesId =
+    | "UNRATE"       // Unemployment Rate
+    | "CPIAUCSL"     // CPI Inflation
+    | "FEDFUNDS"     // Federal Funds Rate
+    | "DCOILWTICO"   // WTI Crude Oil
+    | "T10Y2Y";      // 10-2yr Treasury Spread (recession indicator)
+
 // ─── API Response wrappers ────────────────────────────────────────────────────
 
 export interface HealthResponse {
