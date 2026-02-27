@@ -17,7 +17,7 @@ export function useProjection(width: number, height: number) {
     );
 
     const graticule = useMemo(() => d3.geoGraticule()(), []);
-    const sphere = useMemo((): GeoJSON.Geometry => ({ type: "Sphere" as const }), []);
+    const sphere = useMemo((): unknown => ({ type: "Sphere" as const }), []);
 
     return { projection, pathGen, graticule, sphere };
 }
