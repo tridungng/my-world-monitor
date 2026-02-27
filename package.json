@@ -1,5 +1,5 @@
 {
-  "name": "worldmonitor",
+  "name": "my-world-monitor",
   "version": "1.0.0",
   "private": true,
   "description": "AI-powered global intelligence dashboard",
@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@worldmonitor/types": "^1.0.0"
   }
 }
