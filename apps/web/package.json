@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev":       "vite",
+    "build":     "tsc && vite build",
+    "preview":   "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext ts,tsx"
+    "lint":      "eslint . --ext ts,tsx"
   },
   "dependencies": {
     "@worldmonitor/types": "*",
@@ -16,6 +16,7 @@
     "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "recharts": "^2.12.7",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
