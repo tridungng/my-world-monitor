@@ -1,43 +1,95 @@
-import { LAYER_DEFS, BRANCH_COLORS } from "../constants/layers";
+import { LAYER_DEFS, BRANCH_COLORS, EONET_STYLES } from "../constants/layers";
 import { useMapStore } from "../store/useMapStore";
+import type { Earthquake, EONETEvent } from "@worldmonitor/types";
+import { DisasterFeed } from "./DisasterFeed";
 
 interface Props {
     uniqueBranches: string[];
     baseCount: number;
+    earthquakes: Earthquake[];
+    eonet: EONETEvent[];
 }
 
-export function Sidebar({ uniqueBranches, baseCount }: Props) {
-    const { layers, toggleLayer, selected, setSelected, filterBranch, setFilterBranch } = useMapStore();
+const STATIC_LAYERS = LAYER_DEFS.filter((l) => l.category === "static");
+const LIVE_LAYERS   = LAYER_DEFS.filter((l) => l.category === "live");
+
+export function Sidebar({ uniqueBranches, baseCount, earthquakes, eonet }: Props) {
+    const {
+        layers, toggleLayer,
+        selected, setSelected,
+        filterBranch, setFilterBranch,
+        minMagnitude, setMinMagnitude,
+        eonetCategories, toggleEonetCategory,
+    } = useMapStore();
 
     return (
         <div style={{ width: 280, background: "#040c18", borderRight: "1px solid #0f2a44", display: "flex", flexDirection: "column", overflow: "hidden", flexShrink: 0 }}>
 
-            {/* Layer toggles */}
+            {/* ── Static layers ── */}
             <section style={{ padding: "12px 14px 8px", borderBottom: "1px solid #0a1e33" }}>
-                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>DATA LAYERS</div>
-                {LAYER_DEFS.map((ld) => (
-                    <div
-                        key={ld.id}
-                        onClick={() => toggleLayer(ld.id)}
-                        style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 8px", borderRadius: 4, marginBottom: 2, cursor: "pointer", background: layers[ld.id] ? "rgba(56,189,248,0.05)" : "transparent", border: `1px solid ${layers[ld.id] ? "#1a4060" : "transparent"}` }}
-                    >
-                        <div style={{ width: 14, height: 14, borderRadius: 2, border: `2px solid ${layers[ld.id] ? ld.color : "#2a4a5a"}`, background: layers[ld.id] ? ld.color + "33" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            {layers[ld.id] && <div style={{ width: 6, height: 6, background: ld.color, borderRadius: 1 }} />}
-                        </div>
-                        <span style={{ fontSize: 10, color: layers[ld.id] ? "#c8d8e8" : "#4a6a7a", letterSpacing: "0.06em" }}>{ld.label}</span>
-                        <div style={{ flex: 1 }} />
-                        <span style={{ fontSize: 14, opacity: 0.6 }}>{ld.icon}</span>
-                    </div>
+                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>STATIC LAYERS</div>
+                {STATIC_LAYERS.map((ld) => (
+                    <LayerToggle key={ld.id} ld={ld} active={layers[ld.id]} onToggle={() => toggleLayer(ld.id)} />
                 ))}
             </section>
 
-            {/* Branch filter */}
+            {/* ── Live layers ── */}
+            <section style={{ padding: "10px 14px 8px", borderBottom: "1px solid #0a1e33" }}>
+                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>
+                    LIVE FEEDS <span style={{ color: "#00ff88", marginLeft: 4 }}>●</span>
+                </div>
+                {LIVE_LAYERS.map((ld) => (
+                    <LayerToggle key={ld.id} ld={ld} active={layers[ld.id]} onToggle={() => toggleLayer(ld.id)} />
+                ))}
+
+                {/* Magnitude filter */}
+                {layers.earthquakes && (
+                    <div style={{ marginTop: 8, padding: "6px 8px", background: "#071523", border: "1px solid #1a3a5c", borderRadius: 3 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                            <span style={{ fontSize: 9, color: "#4a7a8a" }}>MIN MAGNITUDE</span>
+                            <span style={{ fontSize: 9, color: "#ff6b35", fontWeight: 700 }}>M{minMagnitude.toFixed(1)}+</span>
+                        </div>
+                        <input
+                            type="range" min={4} max={8} step={0.5}
+                            value={minMagnitude}
+                            onChange={(e) => setMinMagnitude(parseFloat(e.target.value))}
+                            style={{ width: "100%", accentColor: "#ff6b35" }}
+                        />
+                    </div>
+                )}
+
+                {/* EONET category filter */}
+                {layers.eonet && (
+                    <div style={{ marginTop: 8 }}>
+                        <div style={{ fontSize: 8, color: "#2a5a7a", marginBottom: 4, letterSpacing: "0.1em" }}>EONET CATEGORIES</div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                            {Object.entries(EONET_STYLES).filter(([k]) => k !== "default").map(([cat, style]) => (
+                                <button
+                                    key={cat}
+                                    onClick={() => toggleEonetCategory(cat)}
+                                    title={cat}
+                                    style={{
+                                        padding: "2px 5px", fontSize: 10, borderRadius: 2, cursor: "pointer",
+                                        background: eonetCategories.has(cat) ? style.color + "22" : "transparent",
+                                        border: `1px solid ${eonetCategories.has(cat) ? style.color : "#1a3a5c"}`,
+                                        color: eonetCategories.has(cat) ? style.color : "#2a4a5a",
+                                    }}
+                                >
+                                    {style.icon}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </section>
+
+            {/* ── Branch filter ── */}
             <section style={{ padding: "10px 14px 8px", borderBottom: "1px solid #0a1e33" }}>
                 <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>BRANCH FILTER</div>
                 <select
                     value={filterBranch}
                     onChange={(e) => setFilterBranch(e.target.value)}
-                    style={{ width: "100%", background: "#071523", border: "1px solid #1a3a5c", color: "#94b8d4", padding: "6px 8px", fontSize: 10, borderRadius: 3, letterSpacing: "0.08em" }}
+                    style={{ width: "100%", background: "#071523", border: "1px solid #1a3a5c", color: "#94b8d4", padding: "6px 8px", fontSize: 10, borderRadius: 3 }}
                 >
                     {uniqueBranches.map((b) => (
                         <option key={b} value={b}>{b === "ALL" ? "ALL BRANCHES" : b}</option>
@@ -45,18 +97,23 @@ export function Sidebar({ uniqueBranches, baseCount }: Props) {
                 </select>
             </section>
 
-            {/* Branch legend */}
+            {/* ── Legend ── */}
             <section style={{ padding: "10px 14px 8px", borderBottom: "1px solid #0a1e33" }}>
-                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>BASE LEGEND</div>
-                {Object.entries(BRANCH_COLORS).map(([branch, color]) => (
-                    <div key={branch} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 0" }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: color, boxShadow: `0 0 4px ${color}` }} />
-                        <span style={{ fontSize: 9, color: "#4a7a8a" }}>{branch}</span>
-                    </div>
-                ))}
+                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 6 }}>BASE LEGEND</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px 8px" }}>
+                    {Object.entries(BRANCH_COLORS).map(([branch, color]) => (
+                        <div key={branch} style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 0" }}>
+                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: color, flexShrink: 0, boxShadow: `0 0 3px ${color}` }} />
+                            <span style={{ fontSize: 8, color: "#4a7a8a", whiteSpace: "nowrap" }}>{branch}</span>
+                        </div>
+                    ))}
+                </div>
             </section>
 
-            {/* Selected feature */}
+            {/* ── Live disaster feed ── */}
+            <DisasterFeed earthquakes={earthquakes} eonet={eonet} />
+
+            {/* ── Selected object ── */}
             <section style={{ padding: "10px 14px", flex: 1, overflow: "auto" }}>
                 <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#2a5a7a", marginBottom: 8 }}>SELECTED OBJECT</div>
                 {selected ? (
@@ -66,30 +123,41 @@ export function Sidebar({ uniqueBranches, baseCount }: Props) {
                             .filter(([k]) => k !== "name" && k !== "id")
                             .map(([k, v]) => (
                                 <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "2px 0", borderBottom: "1px solid #0a1e33" }}>
-                                    <span style={{ fontSize: 9, color: "#2a5a7a", letterSpacing: "0.08em" }}>{k.toUpperCase()}</span>
+                                    <span style={{ fontSize: 9, color: "#2a5a7a" }}>{k.toUpperCase()}</span>
                                     <span style={{ fontSize: 9, color: "#94b8d4" }}>{String(v)}</span>
                                 </div>
                             ))}
-                        <button
-                            onClick={() => setSelected(null)}
-                            style={{ marginTop: 8, fontSize: 9, color: "#3a6a8a", padding: "3px 8px", border: "1px solid #1a3a5c", borderRadius: 2, background: "transparent", cursor: "pointer" }}
-                        >
+                        <button onClick={() => setSelected(null)} style={{ marginTop: 8, fontSize: 9, color: "#3a6a8a", padding: "3px 8px", border: "1px solid #1a3a5c", borderRadius: 2, background: "transparent", cursor: "pointer" }}>
                             CLEAR ✕
                         </button>
                     </div>
                 ) : (
-                    <div style={{ fontSize: 9, color: "#2a4a5a", padding: "8px 0" }}>
-                        Click a base or country<br />to inspect details.
-                    </div>
+                    <div style={{ fontSize: 9, color: "#2a4a5a" }}>Click any feature to inspect.</div>
                 )}
             </section>
 
-            {/* Footer */}
-            <div style={{ padding: "8px 14px", borderTop: "1px solid #0a1e33", fontSize: 9, color: "#2a5a7a", lineHeight: 1.8 }}>
-                <div>SYS <span style={{ animation: "blink 1s step-end infinite" }}>▌</span> WEEK 1 ACTIVE</div>
+            {/* ── Footer ── */}
+            <div style={{ padding: "8px 14px", borderTop: "1px solid #0a1e33", fontSize: 9, color: "#2a5a7a", lineHeight: 1.8, flexShrink: 0 }}>
                 <div>LAYERS: {Object.values(layers).filter(Boolean).length}/{LAYER_DEFS.length}</div>
-                <div>BASES VISIBLE: {baseCount}</div>
+                <div>BASES: {baseCount} · EQ: {earthquakes.length} · EONET: {eonet.length}</div>
             </div>
+        </div>
+    );
+}
+
+// ── Reusable layer toggle row ────────────────────────────────────────────────
+function LayerToggle({ ld, active, onToggle }: { ld: typeof LAYER_DEFS[0]; active: boolean; onToggle: () => void }) {
+    return (
+        <div
+            onClick={onToggle}
+            style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 8px", borderRadius: 4, marginBottom: 2, cursor: "pointer", background: active ? "rgba(56,189,248,0.05)" : "transparent", border: `1px solid ${active ? "#1a4060" : "transparent"}` }}
+        >
+            <div style={{ width: 14, height: 14, borderRadius: 2, border: `2px solid ${active ? ld.color : "#2a4a5a"}`, background: active ? ld.color + "33" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                {active && <div style={{ width: 6, height: 6, background: ld.color, borderRadius: 1 }} />}
+            </div>
+            <span style={{ fontSize: 10, color: active ? "#c8d8e8" : "#4a6a7a", letterSpacing: "0.06em" }}>{ld.label}</span>
+            <div style={{ flex: 1 }} />
+            <span style={{ fontSize: 13, opacity: 0.6 }}>{ld.icon}</span>
         </div>
     );
 }
