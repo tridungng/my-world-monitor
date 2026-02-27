@@ -6,4 +6,8 @@ dist/
 .DS_Store
 /.idea/developer-tools.xml
 /.idea/vcs.xml
-/.idea/*
+/.idea/workspace.xml
+/.idea/copilot.data.migration.ask2agent.xml
+/.idea/git_toolbox_prj.xml
+/.idea/.gitignore
+/.idea/.name
