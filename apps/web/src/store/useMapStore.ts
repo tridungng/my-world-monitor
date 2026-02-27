@@ -11,7 +11,7 @@ export interface TooltipState {
     y: number;
     content: string;
     sub?: string;
-    type: "base" | "cable" | "country";
+    type: "base" | "cable" | "country" | "earthquake" | "eonet";
     color?: string;
 }
 
@@ -26,17 +26,34 @@ interface MapStore {
     tooltip: TooltipState | null;
     setTooltip: (t: TooltipState | null) => void;
 
-    // UI
+    // UI panels
     sidebarOpen: boolean;
     setSidebarOpen: (v: boolean) => void;
+    economicPanelOpen: boolean;
+    setEconomicPanelOpen: (v: boolean) => void;
+
+    // Filters
     filterBranch: string;
     setFilterBranch: (b: string) => void;
+    minMagnitude: number;
+    setMinMagnitude: (m: number) => void;
+    eonetCategories: Set<string>;
+    toggleEonetCategory: (c: string) => void;
+
+    // Cursor
     cursorPos: { lat: number; lon: number };
     setCursorPos: (p: { lat: number; lon: number }) => void;
 }
 
 export const useMapStore = create<MapStore>((set) => ({
-    layers: { graticule: true, countries: true, cables: true, bases: true },
+    layers: {
+        graticule:   true,
+        countries:   true,
+        cables:      true,
+        bases:       true,
+        earthquakes: true,
+        eonet:       true,
+    },
     toggleLayer: (id) =>
         set((s) => ({ layers: { ...s.layers, [id]: !s.layers[id] } })),
 
@@ -47,8 +64,21 @@ export const useMapStore = create<MapStore>((set) => ({
 
     sidebarOpen: true,
     setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+    economicPanelOpen: false,
+    setEconomicPanelOpen: (economicPanelOpen) => set({ economicPanelOpen }),
+
     filterBranch: "ALL",
     setFilterBranch: (filterBranch) => set({ filterBranch }),
+    minMagnitude: 4.0,
+    setMinMagnitude: (minMagnitude) => set({ minMagnitude }),
+    eonetCategories: new Set(["Wildfires", "Severe Storms", "Volcanoes", "Floods", "Drought", "Dust and Haze", "Landslides", "Sea and Lake Ice", "Snow", "Earthquakes"]),
+    toggleEonetCategory: (c) =>
+        set((s) => {
+            const next = new Set(s.eonetCategories);
+            next.has(c) ? next.delete(c) : next.add(c);
+            return { eonetCategories: next };
+        }),
+
     cursorPos: { lat: 0, lon: 0 },
     setCursorPos: (cursorPos) => set({ cursorPos }),
 }));
