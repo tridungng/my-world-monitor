@@ -1,6 +1,9 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
+import { getOrFetch } from "./lib/cache.js";
+import { disasterRoutes } from "./routes/disasters.js";
+import { economicRoutes }  from "./routes/economic.js";
 
 const app = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
@@ -9,57 +12,41 @@ await app.register(cors, {
 });
 await app.register(helmet, { contentSecurityPolicy: false });
 
-// ── Health ──────────────────────────────────────────────────────────────────
+// ── Health ────────────────────────────────────────────────────────────────────
 app.get("/api/health", async () => ({
     status: "ok",
     service: "worldmonitor-api",
+    week: 2,
     timestamp: new Date().toISOString(),
 }));
 
-// ── Proxy: Countries GeoJSON ─────────────────────────────────────────────────
-// Caches the Natural Earth GeoJSON so the browser doesn't hit GitHub directly
-let countriesCache: unknown = null;
-let countriesCachedAt = 0;
-const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
+// ── Layer: Countries ──────────────────────────────────────────────────────────
+app.get("/api/layers/countries", async () =>
+    getOrFetch("countries", 60 * 60_000, () =>
+        fetch("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson")
+            .then((r) => r.json())
+    )
+);
 
-app.get("/api/layers/countries", async (_req, reply) => {
-    const now = Date.now();
-    if (countriesCache && now - countriesCachedAt < CACHE_TTL_MS) {
-        return reply.send(countriesCache);
-    }
-    const res = await fetch(
-        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson"
-    );
-    countriesCache = await res.json();
-    countriesCachedAt = now;
-    return reply.send(countriesCache);
-});
+// ── Layer: Submarine Cables ───────────────────────────────────────────────────
+app.get("/api/layers/cables", async () =>
+    getOrFetch("cables", 60 * 60_000, () =>
+        fetch("https://raw.githubusercontent.com/lifewinning/submarine-cable-taps/refs/heads/master/data/submarine_cables.geojson")
+            .then((r) => r.json())
+    )
+);
 
-// ── Proxy: Submarine Cables GeoJSON ─────────────────────────────────────────
-let cablesCache: unknown = null;
-let cablesCachedAt = 0;
-
-app.get("/api/layers/cables", async (_req, reply) => {
-    const now = Date.now();
-    if (cablesCache && now - cablesCachedAt < CACHE_TTL_MS) {
-        return reply.send(cablesCache);
-    }
-    const res = await fetch(
-        "https://raw.githubusercontent.com/lifewinning/submarine-cable-taps/refs/heads/master/data/submarine_cables.geojson"
-    );
-    cablesCache = await res.json();
-    cablesCachedAt = now;
-    return reply.send(cablesCache);
-});
-
-// ── Military Bases (static for Week 1, DB-backed from Week 3+) ───────────────
+// ── Layer: Military Bases ─────────────────────────────────────────────────────
 app.get("/api/layers/bases", async () => {
-    // Re-export the static dataset. In Week 3+ replace with PostGIS query.
     const { MILITARY_BASES } = await import("./data/bases.js");
     return { type: "FeatureCollection", features: MILITARY_BASES };
 });
 
-// ── Start ────────────────────────────────────────────────────────────────────
+// ── Week 2: Disaster + Economic routes ───────────────────────────────────────
+await app.register(disasterRoutes);
+await app.register(economicRoutes);
+
+// ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = Number(process.env.PORT ?? 3001);
 await app.listen({ port: PORT, host: "0.0.0.0" });
-console.log(`\n  🌍  World Monitor API  →  http://localhost:${PORT}\n`);
+console.log(`\n  🌍  World Monitor API  →  http://localhost:${PORT}/api/health\n`);
