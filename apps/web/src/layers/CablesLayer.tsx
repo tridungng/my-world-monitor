@@ -14,7 +14,7 @@ export function CablesLayer({ data, pathGen, svgRef, scale }: Props) {
 
     return (
         <>
-            {data.features.map((f, i) => {
+            {data.features?.map((f, i) => {
                 if (!f.geometry || f.geometry.type === "Point") return null;
                 const color = CABLE_COLORS[i % CABLE_COLORS.length];
                 const p = f.properties as Record<string, unknown>;
