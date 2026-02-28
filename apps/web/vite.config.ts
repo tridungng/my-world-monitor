@@ -7,15 +7,20 @@ export default defineConfig({
         port: 5173,
         open: true,
         proxy: {
-            // Forward /api/* calls to the Fastify backend during development
             "/api": {
-                target: "http://localhost:3001",
+                target:      "http://localhost:3001",
                 changeOrigin: true,
+                // SSE needs these headers kept intact
+                configure: (proxy) => {
+                    proxy.on("proxyReq", (proxyReq) => {
+                        proxyReq.setHeader("Accept", "text/event-stream");
+                    });
+                },
             },
         },
     },
     build: {
-        outDir: "dist",
+        outDir:    "dist",
         sourcemap: true,
     },
 });
