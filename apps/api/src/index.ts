@@ -4,6 +4,8 @@ import helmet from "@fastify/helmet";
 import { getOrFetch } from "./lib/cache.js";
 import { disasterRoutes } from "./routes/disasters.js";
 import { economicRoutes }  from "./routes/economic.js";
+import { flightRoutes }    from "./routes/flights.js";
+import { conflictRoutes }  from "./routes/conflict.js";
 
 const app = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
@@ -14,9 +16,9 @@ await app.register(helmet, { contentSecurityPolicy: false });
 
 // ── Health ────────────────────────────────────────────────────────────────────
 app.get("/api/health", async () => ({
-    status: "ok",
-    service: "worldmonitor-api",
-    week: 2,
+    status:    "ok",
+    service:   "worldmonitor-api",
+    week:      3,
     timestamp: new Date().toISOString(),
 }));
 
@@ -31,7 +33,7 @@ app.get("/api/layers/countries", async () =>
 // ── Layer: Submarine Cables ───────────────────────────────────────────────────
 app.get("/api/layers/cables", async () =>
     getOrFetch("cables", 60 * 60_000, () =>
-        fetch("https://raw.githubusercontent.com/lifewinning/submarine-cable-taps/refs/heads/master/data/submarine_cables.geojson")
+        fetch("https://raw.githubusercontent.com/telegeography/www.submarinecablemap.com/master/web/public/api/v3/cable/cable-geo.json")
             .then((r) => r.json())
     )
 );
@@ -42,9 +44,13 @@ app.get("/api/layers/bases", async () => {
     return { type: "FeatureCollection", features: MILITARY_BASES };
 });
 
-// ── Week 2: Disaster + Economic routes ───────────────────────────────────────
+// ── Week 2 ────────────────────────────────────────────────────────────────────
 await app.register(disasterRoutes);
 await app.register(economicRoutes);
+
+// ── Week 3 ────────────────────────────────────────────────────────────────────
+await app.register(flightRoutes);
+await app.register(conflictRoutes);
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = Number(process.env.PORT ?? 3001);
