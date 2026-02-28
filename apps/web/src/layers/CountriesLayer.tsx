@@ -1,5 +1,5 @@
-import type { GeoGeometryObjects } from "d3";
-import { useMapStore } from "../store/useMapStore";
+import type {GeoGeometryObjects} from "d3";
+import {useMapStore} from "../store/useMapStore";
 
 interface Props {
     data: GeoJSON.FeatureCollection;
@@ -7,8 +7,8 @@ interface Props {
     svgRef: React.RefObject<SVGSVGElement>;
 }
 
-export function CountriesLayer({ data, pathGen, svgRef }: Props) {
-    const { selected, setSelected, setTooltip } = useMapStore();
+export function CountriesLayer({data, pathGen, svgRef}: Props) {
+    const {selected, setSelected, setTooltip} = useMapStore();
 
     return (
         <>
@@ -38,12 +38,12 @@ export function CountriesLayer({ data, pathGen, svgRef }: Props) {
                         onClick={() => {
                             const p = f.properties as Record<string, unknown>;
                             setSelected({
-                                name:      String(p?.ADMIN ?? ""),
+                                name: String(p?.ADMIN ?? ""),
                                 continent: String(p?.CONTINENT ?? ""),
-                                economy:   String(p?.ECONOMY ?? ""),
+                                economy: String(p?.ECONOMY ?? ""),
                                 population: String(p?.POP_EST ?? ""),
-                                gdp:       `${p?.GDP_MD_EST}M USD`,
-                                iso:       String(p?.ISO_A3 ?? ""),
+                                gdp: `${p?.GDP_MD_EST}M USD`,
+                                iso: String(p?.ISO_A3 ?? ""),
                             });
                         }}
                     />

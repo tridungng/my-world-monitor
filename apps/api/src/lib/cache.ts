@@ -20,7 +20,7 @@ export function get<T>(key: string, ttlMs: number): T | null {
 }
 
 export function set<T>(key: string, data: T): void {
-    store.set(key, { data, cachedAt: Date.now() });
+    store.set(key, {data, cachedAt: Date.now()});
 }
 
 export async function getOrFetch<T>(

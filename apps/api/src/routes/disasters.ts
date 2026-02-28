@@ -1,32 +1,32 @@
-import type { FastifyInstance } from "fastify";
-import type { Earthquake, EONETEvent } from "@worldmonitor/types";
-import { getOrFetch } from "../lib/cache.js";
+import type {FastifyInstance} from "fastify";
+import type {Earthquake, EONETEvent} from "@worldmonitor/types";
+import {getOrFetch} from "../lib/cache.js";
 
 const TTL_QUAKES = 60_000;       // 1 min — high-frequency updates
-const TTL_EONET  = 5 * 60_000;   // 5 min
+const TTL_EONET = 5 * 60_000;   // 5 min
 
 // ─── USGS Earthquakes ─────────────────────────────────────────────────────────
 
 async function fetchEarthquakes(): Promise<Earthquake[]> {
     const url = new URL("https://earthquake.usgs.gov/fdsnws/event/1/query");
-    url.searchParams.set("format",       "geojson");
-    url.searchParams.set("limit",        "300");
+    url.searchParams.set("format", "geojson");
+    url.searchParams.set("limit", "300");
     url.searchParams.set("minmagnitude", "4.0");
-    url.searchParams.set("orderby",      "time");
+    url.searchParams.set("orderby", "time");
 
-    const res  = await fetch(url.toString());
+    const res = await fetch(url.toString());
     const json = await res.json() as { features: USGSFeature[] };
 
     return json.features.map((f) => ({
-        id:      f.id,
-        mag:     f.properties.mag,
-        place:   f.properties.place,
-        time:    f.properties.time,
-        depth:   f.geometry.coordinates[2],
-        lat:     f.geometry.coordinates[1],
-        lon:     f.geometry.coordinates[0],
-        url:     f.properties.url,
-        status:  f.properties.status,
+        id: f.id,
+        mag: f.properties.mag,
+        place: f.properties.place,
+        time: f.properties.time,
+        depth: f.geometry.coordinates[2],
+        lat: f.geometry.coordinates[1],
+        lon: f.geometry.coordinates[0],
+        url: f.properties.url,
+        status: f.properties.status,
         tsunami: f.properties.tsunami,
     }));
 }
@@ -48,7 +48,7 @@ interface USGSFeature {
 
 async function fetchEONET(): Promise<EONETEvent[]> {
     const url = "https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=100&days=30";
-    const res  = await fetch(url);
+    const res = await fetch(url);
     const json = await res.json() as { events: EONETRaw[] };
 
     const events: EONETEvent[] = [];
@@ -57,13 +57,13 @@ async function fetchEONET(): Promise<EONETEvent[]> {
         const geo = ev.geometry.at(-1); // most recent geometry entry
         if (!geo || geo.type !== "Point") continue;
         events.push({
-            id:       ev.id,
-            title:    ev.title,
+            id: ev.id,
+            title: ev.title,
             category: ev.categories[0]?.title ?? "Unknown",
-            date:     geo.date,
-            lat:      geo.coordinates[1],
-            lon:      geo.coordinates[0],
-            closed:   ev.closed ?? null,
+            date: geo.date,
+            lat: geo.coordinates[1],
+            lon: geo.coordinates[0],
+            closed: ev.closed ?? null,
         });
     }
     return events;

@@ -1,7 +1,7 @@
-import type { GeoProjection } from "d3";
-import type { MilitaryBase } from "@worldmonitor/types";
-import { BRANCH_COLORS } from "../constants/layers";
-import { useMapStore } from "../store/useMapStore";
+import type {GeoProjection} from "d3";
+import type {MilitaryBase} from "@worldmonitor/types";
+import {BRANCH_COLORS} from "../constants/layers";
+import {useMapStore} from "../store/useMapStore";
 
 interface Props {
     bases: MilitaryBase[];
@@ -16,8 +16,8 @@ function fmt(n: number) {
     return n >= 1000 ? `${(n / 1000).toFixed(0)}k` : String(n);
 }
 
-export function BasesLayer({ bases, projection, svgRef, scale, tick }: Props) {
-    const { selected, setSelected, setTooltip } = useMapStore();
+export function BasesLayer({bases, projection, svgRef, scale, tick}: Props) {
+    const {selected, setSelected, setTooltip} = useMapStore();
 
     return (
         <>
@@ -25,16 +25,16 @@ export function BasesLayer({ bases, projection, svgRef, scale, tick }: Props) {
                 const pt = projection([base.lon, base.lat]);
                 if (!pt) return null;
 
-                const color      = BRANCH_COLORS[base.branch] ?? "#94b8d4";
+                const color = BRANCH_COLORS[base.branch] ?? "#94b8d4";
                 const isSelected = selected?.name === base.name;
-                const r          = (isSelected || base.type === "Nuclear") ? 5 : 3.5;
-                const isPulsing  = base.type === "Nuclear" || base.type === "Naval" || isSelected;
-                const pulse      = tick % 2 === 0 ? 0.9 : 0.3;
+                const r = (isSelected || base.type === "Nuclear") ? 5 : 3.5;
+                const isPulsing = base.type === "Nuclear" || base.type === "Naval" || isSelected;
+                const pulse = tick % 2 === 0 ? 0.9 : 0.3;
 
                 return (
                     <g
                         key={base.id}
-                        style={{ cursor: "pointer" }}
+                        style={{cursor: "pointer"}}
                         onMouseEnter={(e) => {
                             const rect = svgRef.current?.getBoundingClientRect();
                             if (!rect) return;
@@ -50,13 +50,13 @@ export function BasesLayer({ bases, projection, svgRef, scale, tick }: Props) {
                         onMouseLeave={() => setTooltip(null)}
                         onClick={() =>
                             setSelected({
-                                name:      base.name,
-                                country:   base.country,
-                                branch:    base.branch,
-                                type:      base.type,
+                                name: base.name,
+                                country: base.country,
+                                branch: base.branch,
+                                type: base.type,
                                 personnel: base.personnel?.toLocaleString() ?? "—",
-                                lat:       base.lat,
-                                lon:       base.lon,
+                                lat: base.lat,
+                                lon: base.lon,
                             })
                         }
                     >

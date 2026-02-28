@@ -1,4 +1,4 @@
-import type { FastifyReply } from "fastify";
+import type {FastifyReply} from "fastify";
 
 type SseClient = { reply: FastifyReply; lastPing: number };
 
@@ -8,12 +8,12 @@ const channels = new Map<string, Set<SseClient>>();
 export function subscribe(channel: string, reply: FastifyReply) {
     if (!channels.has(channel)) channels.set(channel, new Set());
 
-    reply.raw.setHeader("Content-Type",  "text/event-stream");
+    reply.raw.setHeader("Content-Type", "text/event-stream");
     reply.raw.setHeader("Cache-Control", "no-cache");
-    reply.raw.setHeader("Connection",    "keep-alive");
+    reply.raw.setHeader("Connection", "keep-alive");
     reply.raw.flushHeaders();
 
-    const client: SseClient = { reply, lastPing: Date.now() };
+    const client: SseClient = {reply, lastPing: Date.now()};
     channels.get(channel)!.add(client);
 
     // Heartbeat so proxies/nginx don't close idle connections

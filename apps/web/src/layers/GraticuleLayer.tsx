@@ -4,29 +4,29 @@ interface Props {
     sphere: GeoJSON.Geometry;
 }
 
-export function GraticuleLayer({ pathGen, graticule, sphere }: Props) {
+export function GraticuleLayer({pathGen, graticule, sphere}: Props) {
     return (
         <>
             <defs>
                 <radialGradient id="sphereGrad" cx="40%" cy="40%">
-                    <stop offset="0%"   stopColor="#061525" />
-                    <stop offset="100%" stopColor="#020810" />
+                    <stop offset="0%" stopColor="#061525"/>
+                    <stop offset="100%" stopColor="#020810"/>
                 </radialGradient>
                 <clipPath id="mapClip">
-                    <path d={pathGen(sphere) ?? ""} />
+                    <path d={pathGen(sphere) ?? ""}/>
                 </clipPath>
                 <filter id="glow">
-                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
                     <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
                     </feMerge>
                 </filter>
                 <filter id="cableglow">
-                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
                     <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
                     </feMerge>
                 </filter>
             </defs>

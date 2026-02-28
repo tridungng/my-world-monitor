@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
@@ -8,7 +8,7 @@ export default defineConfig({
         open: true,
         proxy: {
             "/api": {
-                target:      "http://localhost:3001",
+                target: "http://localhost:3001",
                 changeOrigin: true,
                 // SSE needs these headers kept intact
                 configure: (proxy) => {
@@ -20,7 +20,7 @@ export default defineConfig({
         },
     },
     build: {
-        outDir:    "dist",
+        outDir: "dist",
         sourcemap: true,
     },
 });

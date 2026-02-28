@@ -1,7 +1,7 @@
-import type { GeoProjection } from "d3";
-import type { EONETEvent } from "@worldmonitor/types";
-import { eonetStyle } from "../constants/layers";
-import { useMapStore } from "../store/useMapStore";
+import type {GeoProjection} from "d3";
+import type {EONETEvent} from "@worldmonitor/types";
+import {eonetStyle} from "../constants/layers";
+import {useMapStore} from "../store/useMapStore";
 
 interface Props {
     events: EONETEvent[];
@@ -11,10 +11,10 @@ interface Props {
 }
 
 const BASE_FONT = 12;
-const BASE_R    = 7;
+const BASE_R = 7;
 
-export function ENONETLayer({ events, projection, svgRef, scale }: Props) {
-    const { selected, setSelected, setTooltip } = useMapStore();
+export function ENONETLayer({events, projection, svgRef, scale}: Props) {
+    const {selected, setSelected, setTooltip} = useMapStore();
 
     return (
         <>
@@ -22,15 +22,15 @@ export function ENONETLayer({ events, projection, svgRef, scale }: Props) {
                 const pt = projection([ev.lon, ev.lat]);
                 if (!pt) return null;
 
-                const style      = eonetStyle(ev.category);
-                const r          = BASE_R / scale;
-                const fontSize   = BASE_FONT / scale;
+                const style = eonetStyle(ev.category);
+                const r = BASE_R / scale;
+                const fontSize = BASE_FONT / scale;
                 const isSelected = selected?.name === ev.title;
 
                 return (
                     <g
                         key={ev.id}
-                        style={{ cursor: "pointer" }}
+                        style={{cursor: "pointer"}}
                         onMouseEnter={(e) => {
                             const rect = svgRef.current?.getBoundingClientRect();
                             if (!rect) return;
@@ -46,12 +46,12 @@ export function ENONETLayer({ events, projection, svgRef, scale }: Props) {
                         onMouseLeave={() => setTooltip(null)}
                         onClick={() =>
                             setSelected({
-                                name:     ev.title,
+                                name: ev.title,
                                 category: ev.category,
-                                date:     new Date(ev.date).toUTCString(),
-                                status:   ev.closed ? "Closed" : "ACTIVE",
-                                lat:      ev.lat,
-                                lon:      ev.lon,
+                                date: new Date(ev.date).toUTCString(),
+                                status: ev.closed ? "Closed" : "ACTIVE",
+                                lat: ev.lat,
+                                lon: ev.lon,
                             })
                         }
                     >
@@ -71,7 +71,7 @@ export function ENONETLayer({ events, projection, svgRef, scale }: Props) {
                             textAnchor="middle"
                             dominantBaseline="central"
                             fontSize={fontSize}
-                            style={{ userSelect: "none", pointerEvents: "none" }}
+                            style={{userSelect: "none", pointerEvents: "none"}}
                             clipPath="url(#mapClip)"
                         >
                             {style.icon}

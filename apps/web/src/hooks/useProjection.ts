@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import {useMemo} from "react";
 import * as d3 from "d3";
 
 export function useProjection(width: number, height: number) {
@@ -17,7 +17,7 @@ export function useProjection(width: number, height: number) {
     );
 
     const graticule = useMemo(() => d3.geoGraticule()(), []);
-    const sphere = useMemo((): unknown => ({ type: "Sphere" as const }), []);
+    const sphere = useMemo((): unknown => ({type: "Sphere" as const}), []);
 
-    return { projection, pathGen, graticule, sphere };
+    return {projection, pathGen, graticule, sphere};
 }

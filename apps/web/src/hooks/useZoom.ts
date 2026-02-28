@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import {useEffect, useRef, useCallback, useState} from "react";
 import * as d3 from "d3";
 
 export function useZoom(svgEl: SVGSVGElement | null) {
@@ -13,10 +13,12 @@ export function useZoom(svgEl: SVGSVGElement | null) {
             .on("zoom", (e) => setTransform(e.transform));
         d3.select(svgEl).call(zoom);
         zoomRef.current = zoom;
-        return () => { d3.select(svgEl).on(".zoom", null); };
+        return () => {
+            d3.select(svgEl).on(".zoom", null);
+        };
     }, [svgEl]);
 
-    const zoomIn  = useCallback(() => {
+    const zoomIn = useCallback(() => {
         if (!svgEl || !zoomRef.current) return;
         d3.select(svgEl).transition().duration(280).call(zoomRef.current.scaleBy, 1.5);
     }, [svgEl]);
@@ -31,5 +33,5 @@ export function useZoom(svgEl: SVGSVGElement | null) {
         d3.select(svgEl).transition().duration(480).call(zoomRef.current.transform, d3.zoomIdentity);
     }, [svgEl]);
 
-    return { transform, zoomIn, zoomOut, zoomReset };
+    return {transform, zoomIn, zoomOut, zoomReset};
 }

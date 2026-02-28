@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import type { MilitaryBase } from "@worldmonitor/types";
+import {useQuery} from "@tanstack/react-query";
+import type {MilitaryBase} from "@worldmonitor/types";
 
 const fetchJson = (url: string) => fetch(url).then((r) => r.json());
 

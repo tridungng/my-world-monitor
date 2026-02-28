@@ -1,7 +1,7 @@
-import type { GeoProjection } from "d3";
-import type { Earthquake } from "@worldmonitor/types";
-import { depthColor, magRadius } from "../constants/layers";
-import { useMapStore } from "../store/useMapStore";
+import type {GeoProjection} from "d3";
+import type {Earthquake} from "@worldmonitor/types";
+import {depthColor, magRadius} from "../constants/layers";
+import {useMapStore} from "../store/useMapStore";
 
 interface Props {
     quakes: Earthquake[];
@@ -10,8 +10,8 @@ interface Props {
     scale: number;
 }
 
-export function EarthquakeLayer({ quakes, projection, svgRef, scale }: Props) {
-    const { selected, setSelected, setTooltip } = useMapStore();
+export function EarthquakeLayer({quakes, projection, svgRef, scale}: Props) {
+    const {selected, setSelected, setTooltip} = useMapStore();
 
     return (
         <>
@@ -19,14 +19,14 @@ export function EarthquakeLayer({ quakes, projection, svgRef, scale }: Props) {
                 const pt = projection([q.lon, q.lat]);
                 if (!pt) return null;
 
-                const color      = depthColor(q.depth);
-                const r          = magRadius(q.mag) / scale;
+                const color = depthColor(q.depth);
+                const r = magRadius(q.mag) / scale;
                 const isSelected = selected?.name === q.place;
 
                 return (
                     <g
                         key={q.id}
-                        style={{ cursor: "pointer" }}
+                        style={{cursor: "pointer"}}
                         onMouseEnter={(e) => {
                             const rect = svgRef.current?.getBoundingClientRect();
                             if (!rect) return;
@@ -42,14 +42,14 @@ export function EarthquakeLayer({ quakes, projection, svgRef, scale }: Props) {
                         onMouseLeave={() => setTooltip(null)}
                         onClick={() =>
                             setSelected({
-                                name:      q.place,
+                                name: q.place,
                                 magnitude: q.mag,
-                                depth:     `${q.depth.toFixed(1)} km`,
-                                time:      new Date(q.time).toUTCString(),
-                                status:    q.status,
-                                tsunami:   q.tsunami ? "⚠ TSUNAMI WARNING" : "None",
-                                lat:       q.lat,
-                                lon:       q.lon,
+                                depth: `${q.depth.toFixed(1)} km`,
+                                time: new Date(q.time).toUTCString(),
+                                status: q.status,
+                                tsunami: q.tsunami ? "⚠ TSUNAMI WARNING" : "None",
+                                lat: q.lat,
+                                lon: q.lon,
                             })
                         }
                     >

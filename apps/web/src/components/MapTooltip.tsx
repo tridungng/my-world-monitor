@@ -1,17 +1,17 @@
-import type { TooltipState } from "../store/useMapStore";
+import type {TooltipState} from "../store/useMapStore";
 
 interface Props {
     tooltip: TooltipState;
     transform: { x: number; y: number; k: number };
 }
 
-export function MapTooltip({ tooltip, transform }: Props) {
+export function MapTooltip({tooltip, transform}: Props) {
     // Convert screen coords back to SVG space (before transform)
     const x = (tooltip.x - transform.x) / transform.k + 12;
     const y = (tooltip.y - transform.y) / transform.k - 10;
     const borderColor =
-        tooltip.type === "base"    ? (tooltip.color ?? "#38bdf8") :
-            tooltip.type === "cable"   ? "#f59e0b"                     :
+        tooltip.type === "base" ? (tooltip.color ?? "#38bdf8") :
+            tooltip.type === "cable" ? "#f59e0b" :
                 "#1a3a5c";
 
     return (

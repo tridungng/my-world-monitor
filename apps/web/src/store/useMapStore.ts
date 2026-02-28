@@ -1,8 +1,9 @@
-import { create } from "zustand";
-import type { LayerId } from "../constants/layers";
+import {create} from "zustand";
+import type {LayerId} from "../constants/layers";
 
 export interface SelectedFeature {
     name: string;
+
     [key: string]: string | number | undefined;
 }
 
@@ -61,53 +62,53 @@ interface MapStore {
 
 export const useMapStore = create<MapStore>((set) => ({
     layers: {
-        graticule:   true,
-        countries:   true,
-        cables:      true,
-        bases:       true,
+        graticule: true,
+        countries: true,
+        cables: true,
+        bases: true,
         earthquakes: true,
-        eonet:       true,
-        flights:     true,
-        conflict:    true,
+        eonet: true,
+        flights: true,
+        conflict: true,
     },
     toggleLayer: (id) =>
-        set((s) => ({ layers: { ...s.layers, [id]: !s.layers[id] } })),
+        set((s) => ({layers: {...s.layers, [id]: !s.layers[id]}})),
 
     selected: null,
-    setSelected: (selected) => set({ selected }),
+    setSelected: (selected) => set({selected}),
     tooltip: null,
-    setTooltip: (tooltip) => set({ tooltip }),
+    setTooltip: (tooltip) => set({tooltip}),
 
     sidebarOpen: true,
-    setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+    setSidebarOpen: (sidebarOpen) => set({sidebarOpen}),
     economicPanelOpen: false,
-    setEconomicPanelOpen: (economicPanelOpen) => set({ economicPanelOpen }),
+    setEconomicPanelOpen: (economicPanelOpen) => set({economicPanelOpen}),
     conflictPanelOpen: false,
-    setConflictPanelOpen: (conflictPanelOpen) => set({ conflictPanelOpen }),
+    setConflictPanelOpen: (conflictPanelOpen) => set({conflictPanelOpen}),
 
     filterBranch: "ALL",
-    setFilterBranch: (filterBranch) => set({ filterBranch }),
+    setFilterBranch: (filterBranch) => set({filterBranch}),
     minMagnitude: 4.0,
-    setMinMagnitude: (minMagnitude) => set({ minMagnitude }),
+    setMinMagnitude: (minMagnitude) => set({minMagnitude}),
     eonetCategories: new Set(["Wildfires", "Severe Storms", "Volcanoes", "Floods", "Drought", "Dust and Haze", "Landslides", "Sea and Lake Ice", "Snow", "Earthquakes"]),
     toggleEonetCategory: (c) =>
         set((s) => {
             const next = new Set(s.eonetCategories);
             next.has(c) ? next.delete(c) : next.add(c);
-            return { eonetCategories: next };
+            return {eonetCategories: next};
         }),
     showMilitaryFlightsOnly: false,
-    setShowMilitaryFlightsOnly: (showMilitaryFlightsOnly) => set({ showMilitaryFlightsOnly }),
+    setShowMilitaryFlightsOnly: (showMilitaryFlightsOnly) => set({showMilitaryFlightsOnly}),
     showOnGround: false,
-    setShowOnGround: (showOnGround) => set({ showOnGround }),
+    setShowOnGround: (showOnGround) => set({showOnGround}),
     minConflictSeverity: "low",
-    setMinConflictSeverity: (minConflictSeverity) => set({ minConflictSeverity }),
+    setMinConflictSeverity: (minConflictSeverity) => set({minConflictSeverity}),
 
     flightStreamStatus: "idle",
-    setFlightStreamStatus: (flightStreamStatus) => set({ flightStreamStatus }),
+    setFlightStreamStatus: (flightStreamStatus) => set({flightStreamStatus}),
     flightCount: 0,
-    setFlightCount: (flightCount) => set({ flightCount }),
+    setFlightCount: (flightCount) => set({flightCount}),
 
-    cursorPos: { lat: 0, lon: 0 },
-    setCursorPos: (cursorPos) => set({ cursorPos }),
+    cursorPos: {lat: 0, lon: 0},
+    setCursorPos: (cursorPos) => set({cursorPos}),
 }));

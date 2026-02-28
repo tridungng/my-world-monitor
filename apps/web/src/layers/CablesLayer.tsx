@@ -1,6 +1,6 @@
-import type { GeoGeometryObjects } from "d3";
-import { CABLE_COLORS } from "../constants/layers";
-import { useMapStore } from "../store/useMapStore";
+import type {GeoGeometryObjects} from "d3";
+import {CABLE_COLORS} from "../constants/layers";
+import {useMapStore} from "../store/useMapStore";
 
 interface Props {
     data: GeoJSON.FeatureCollection;
@@ -9,8 +9,8 @@ interface Props {
     scale: number;
 }
 
-export function CablesLayer({ data, pathGen, svgRef, scale }: Props) {
-    const { setSelected, setTooltip } = useMapStore();
+export function CablesLayer({data, pathGen, svgRef, scale}: Props) {
+    const {setSelected, setTooltip} = useMapStore();
 
     return (
         <>
@@ -28,7 +28,7 @@ export function CablesLayer({ data, pathGen, svgRef, scale }: Props) {
                         strokeOpacity={0.55}
                         filter="url(#cableglow)"
                         clipPath="url(#mapClip)"
-                        style={{ cursor: "pointer" }}
+                        style={{cursor: "pointer"}}
                         onMouseEnter={(e) => {
                             const rect = svgRef.current?.getBoundingClientRect();
                             if (!rect) return;
@@ -42,10 +42,10 @@ export function CablesLayer({ data, pathGen, svgRef, scale }: Props) {
                         onMouseLeave={() => setTooltip(null)}
                         onClick={() =>
                             setSelected({
-                                name:          String(p?.name ?? "Submarine Cable"),
-                                type:          "Submarine Cable",
-                                rfs:           String(p?.rfs ?? "—"),
-                                owners:        (p?.owners as string[] | undefined)?.join(", ") ?? "—",
+                                name: String(p?.name ?? "Submarine Cable"),
+                                type: "Submarine Cable",
+                                rfs: String(p?.rfs ?? "—"),
+                                owners: (p?.owners as string[] | undefined)?.join(", ") ?? "—",
                                 landing_points: String((p?.landing_points as unknown[])?.length ?? "—"),
                             })
                         }

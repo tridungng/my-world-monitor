@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import type { Aircraft, FlightSnapshot } from "@worldmonitor/types";
-import { useMapStore } from "../store/useMapStore";
+import {useEffect, useRef, useState, useCallback} from "react";
+import type {Aircraft, FlightSnapshot} from "@worldmonitor/types";
+import {useMapStore} from "../store/useMapStore";
 
 export function useFlightStream() {
-    const [aircraft, setAircraft]  = useState<Aircraft[]>([]);
+    const [aircraft, setAircraft] = useState<Aircraft[]>([]);
     const [lastUpdate, setLastUpdate] = useState<number | null>(null);
     const esRef = useRef<EventSource | null>(null);
-    const { setFlightStreamStatus, setFlightCount } = useMapStore.getState();
+    const {setFlightStreamStatus, setFlightCount} = useMapStore.getState();
 
     const connect = useCallback(() => {
         // Tear down previous connection
@@ -23,7 +23,8 @@ export function useFlightStream() {
                 setLastUpdate(snap.time);
                 setFlightCount(snap.count);
                 setFlightStreamStatus("live");
-            } catch { /* ignore parse errors */ }
+            } catch { /* ignore parse errors */
+            }
         });
 
         es.addEventListener("error", () => {
@@ -48,5 +49,5 @@ export function useFlightStream() {
         };
     }, [connect, setFlightStreamStatus]);
 
-    return { aircraft, lastUpdate };
+    return {aircraft, lastUpdate};
 }

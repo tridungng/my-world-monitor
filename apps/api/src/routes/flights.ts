@@ -1,7 +1,7 @@
-import type { FastifyInstance } from "fastify";
-import type { Aircraft, FlightSnapshot } from "@worldmonitor/types";
-import { getOrFetch, set as cacheSet } from "../lib/cache.js";
-import { subscribe, broadcast, clientCount } from "../lib/sse.js";
+import type {FastifyInstance} from "fastify";
+import type {Aircraft, FlightSnapshot} from "@worldmonitor/types";
+import {getOrFetch, set as cacheSet} from "../lib/cache.js";
+import {subscribe, broadcast, clientCount} from "../lib/sse.js";
 
 const POLL_INTERVAL_MS = 15_000;  // OpenSky allows ~1 req/10s anon, 1/5s with creds
 const CHANNEL = "flights";
@@ -10,17 +10,17 @@ const CHANNEL = "flights";
 // Real military callsigns follow known prefix patterns
 const MIL_CALLSIGN_PREFIXES = [
     // US
-    "RCH","REACH","JAKE","KNIFE","GHOST","DARK","DOOM","HAWK",
-    "EAGLE","RANGER","VIGILANT","SPAR","VENUS","VIXEN","IRON",
-    "COBRA","VIPER","JOLLY","PEDRO","RAVEN","TALON","SHADOW",
+    "RCH", "REACH", "JAKE", "KNIFE", "GHOST", "DARK", "DOOM", "HAWK",
+    "EAGLE", "RANGER", "VIGILANT", "SPAR", "VENUS", "VIXEN", "IRON",
+    "COBRA", "VIPER", "JOLLY", "PEDRO", "RAVEN", "TALON", "SHADOW",
     // NATO
-    "NATO","NAEW","AWACS","MAGIC","LOBSTER",
+    "NATO", "NAEW", "AWACS", "MAGIC", "LOBSTER",
     // UK
-    "RRR","ASCOT","TARTAN","SCOTCH","CANUCK",
+    "RRR", "ASCOT", "TARTAN", "SCOTCH", "CANUCK",
     // German
-    "GFAF","GERMAN",
+    "GFAF", "GERMAN",
     // Russian
-    "RFF","SQD",
+    "RFF", "SQD",
 ];
 
 // Country keywords that usually indicate state/military aircraft
@@ -54,7 +54,7 @@ async function fetchOpenSky(user?: string, pass?: string): Promise<FlightSnapsho
         headers["Authorization"] = "Basic " + Buffer.from(`${user}:${pass}`).toString("base64");
     }
 
-    const res = await fetch(url.toString(), { headers, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(url.toString(), {headers, signal: AbortSignal.timeout(8000)});
     if (!res.ok) throw new Error(`OpenSky ${res.status}: ${res.statusText}`);
 
     const json = await res.json() as { time: number; states: OpenSkyState[] | null };
@@ -63,25 +63,25 @@ async function fetchOpenSky(user?: string, pass?: string): Promise<FlightSnapsho
     const aircraft: Aircraft[] = states
         .filter((s) => s[6] !== null && s[5] !== null)   // must have lat/lon
         .map((s) => ({
-            icao24:         String(s[0] ?? ""),
-            callsign:       String(s[1] ?? "").trim(),
+            icao24: String(s[0] ?? ""),
+            callsign: String(s[1] ?? "").trim(),
             origin_country: String(s[2] ?? ""),
-            lat:            Number(s[6]),
-            lon:            Number(s[5]),
-            altitude:       Number(s[7] ?? s[13] ?? 0),
-            velocity:       Number(s[9] ?? 0),
-            heading:        Number(s[10] ?? 0),
-            vertical_rate:  Number(s[11] ?? 0),
-            on_ground:      Boolean(s[8]),
-            squawk:         String(s[14] ?? ""),
-            isMilitary:     classifyMilitary(String(s[1] ?? ""), String(s[2] ?? "")),
+            lat: Number(s[6]),
+            lon: Number(s[5]),
+            altitude: Number(s[7] ?? s[13] ?? 0),
+            velocity: Number(s[9] ?? 0),
+            heading: Number(s[10] ?? 0),
+            vertical_rate: Number(s[11] ?? 0),
+            on_ground: Boolean(s[8]),
+            squawk: String(s[14] ?? ""),
+            isMilitary: classifyMilitary(String(s[1] ?? ""), String(s[2] ?? "")),
         }))
         // Exclude on-ground aircraft to reduce noise
         .filter((a) => !a.on_ground);
 
     return {
-        time:     json.time,
-        count:    aircraft.length,
+        time: json.time,
+        count: aircraft.length,
         aircraft,
     };
 }
@@ -102,7 +102,7 @@ function startPoller(user?: string, pass?: string) {
             cacheSet("flights_latest", snapshot);
             broadcast<FlightSnapshot>(CHANNEL, "snapshot", snapshot);
         } catch (err) {
-            broadcast(CHANNEL, "error", { message: String(err) });
+            broadcast(CHANNEL, "error", {message: String(err)});
         }
     };
 
@@ -130,7 +130,7 @@ export async function flightRoutes(app: FastifyInstance) {
             );
             return cached;
         } catch (err) {
-            reply.status(503).send({ error: "OpenSky unavailable", detail: String(err) });
+            reply.status(503).send({error: "OpenSky unavailable", detail: String(err)});
         }
     });
 
@@ -143,7 +143,8 @@ export async function flightRoutes(app: FastifyInstance) {
             reply.raw.write(`event: snapshot\ndata: ${JSON.stringify(latest)}\n\n`);
         }
         // Keep request open
-        return new Promise<void>(() => {});
+        return new Promise<void>(() => {
+        });
     });
 
     /** Stats endpoint */
