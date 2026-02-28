@@ -1,24 +1,24 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
-import { getOrFetch } from "./lib/cache.js";
-import { disasterRoutes } from "./routes/disasters.js";
-import { economicRoutes }  from "./routes/economic.js";
-import { flightRoutes }    from "./routes/flights.js";
-import { conflictRoutes }  from "./routes/conflict.js";
+import {getOrFetch} from "./lib/cache.js";
+import {disasterRoutes} from "./routes/disasters.js";
+import {economicRoutes} from "./routes/economic.js";
+import {flightRoutes} from "./routes/flights.js";
+import {conflictRoutes} from "./routes/conflict.js";
 
-const app = Fastify({ logger: { transport: { target: "pino-pretty" } } });
+const app = Fastify({logger: {transport: {target: "pino-pretty"}}});
 
 await app.register(cors, {
     origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
 });
-await app.register(helmet, { contentSecurityPolicy: false });
+await app.register(helmet, {contentSecurityPolicy: false});
 
 // ── Health ────────────────────────────────────────────────────────────────────
 app.get("/api/health", async () => ({
-    status:    "ok",
-    service:   "worldmonitor-api",
-    week:      3,
+    status: "ok",
+    service: "worldmonitor-api",
+    week: 3,
     timestamp: new Date().toISOString(),
 }));
 
@@ -40,8 +40,8 @@ app.get("/api/layers/cables", async () =>
 
 // ── Layer: Military Bases ─────────────────────────────────────────────────────
 app.get("/api/layers/bases", async () => {
-    const { MILITARY_BASES } = await import("./data/bases.js");
-    return { type: "FeatureCollection", features: MILITARY_BASES };
+    const {MILITARY_BASES} = await import("./data/bases.js");
+    return {type: "FeatureCollection", features: MILITARY_BASES};
 });
 
 // ── Week 2 ────────────────────────────────────────────────────────────────────
@@ -54,5 +54,5 @@ await app.register(conflictRoutes);
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = Number(process.env.PORT ?? 3001);
-await app.listen({ port: PORT, host: "0.0.0.0" });
+await app.listen({port: PORT, host: "0.0.0.0"});
 console.log(`\n  🌍  World Monitor API  →  http://localhost:${PORT}/api/health\n`);
