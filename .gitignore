@@ -11,3 +11,4 @@ dist/
 /.idea/git_toolbox_prj.xml
 /.idea/.gitignore
 /.idea/.name
+/.idea/prettier.xml
