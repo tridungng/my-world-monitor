@@ -1,4 +1,4 @@
-export type LayerId = "graticule" | "countries" | "cables" | "bases" | "earthquakes" | "eonet";
+export type LayerId = "graticule" | "countries" | "cables" | "bases" | "earthquakes" | "eonet" | "flights" | "conflict";
 
 export interface LayerDef {
     id: LayerId;
@@ -15,6 +15,8 @@ export const LAYER_DEFS: LayerDef[] = [
     { id: "bases",       label: "Military Bases",     color: "#38bdf8", icon: "✦", category: "static" },
     { id: "earthquakes", label: "Earthquakes",        color: "#ff6b35", icon: "⬤", category: "live"   },
     { id: "eonet",       label: "EONET Events",       color: "#ff4d6d", icon: "◈", category: "live"   },
+    { id: "flights",     label: "Live Flights",       color: "#34d399", icon: "✈", category: "live"   },
+    { id: "conflict",    label: "Conflict Zones",     color: "#f87171", icon: "⚔", category: "live"   },
 ];
 
 export const CABLE_COLORS = [
@@ -71,4 +73,56 @@ export const EONET_STYLES: Record<string, EONETStyle> = {
 
 export function eonetStyle(category: string): EONETStyle {
     return EONET_STYLES[category] ?? EONET_STYLES["default"];
+}
+
+// ─── Conflict styling ──────────────────────────────────────────────────────────
+
+export const SEVERITY_COLORS: Record<string, string> = {
+    critical:      "#ff2200",
+    high:          "#f87171",
+    medium:        "#f59e0b",
+    low:           "#facc15",
+};
+
+export const CONFLICT_TYPE_COLORS: Record<string, string> = {
+    "Battle":                        "#f87171",
+    "Explosion/Remote violence":     "#ff6b35",
+    "Violence against civilians":    "#ff4d6d",
+    "Protests":                      "#818cf8",
+    "Riots":                         "#c084fc",
+    "Strategic development":         "#94a3b8",
+    "Conflict":                      "#f87171",
+};
+
+export function conflictColor(type: string): string {
+    return CONFLICT_TYPE_COLORS[type] ?? "#f87171";
+}
+
+export const TREND_ICONS: Record<string, string> = {
+    escalating:    "↑",
+    stable:        "→",
+    deescalating:  "↓",
+};
+
+export const TREND_COLORS: Record<string, string> = {
+    escalating:    "#f87171",
+    stable:        "#f59e0b",
+    deescalating:  "#34d399",
+};
+
+// ─── Flight styling ────────────────────────────────────────────────────────────
+
+export function altitudeColor(altitude: number): string {
+    if (altitude > 10000) return "#34d399";   // cruising
+    if (altitude > 5000)  return "#38bdf8";   // climbing/descending
+    if (altitude > 1000)  return "#f59e0b";   // low level
+    return "#f87171";                          // very low
+}
+
+export function velocityToKnots(ms: number): number {
+    return Math.round(ms * 1.944);
+}
+
+export function metresToFeet(m: number): number {
+    return Math.round(m * 3.281);
 }
