@@ -33,7 +33,7 @@ app.get("/api/layers/countries", async () =>
 // ── Layer: Submarine Cables ───────────────────────────────────────────────────
 app.get("/api/layers/cables", async () =>
     getOrFetch("cables", 60 * 60_000, () =>
-        fetch("https://raw.githubusercontent.com/telegeography/www.submarinecablemap.com/master/web/public/api/v3/cable/cable-geo.json")
+        fetch("https://raw.githubusercontent.com/lifewinning/submarine-cable-taps/refs/heads/master/data/submarine_cables.geojson")
             .then((r) => r.json())
     )
 );
